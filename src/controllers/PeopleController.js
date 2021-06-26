@@ -6,6 +6,7 @@ class PeopleController {
 
     return res.json(people);
   }
+  
   async showOne(req, res) {
     const { id } = req.params;
 
@@ -39,6 +40,18 @@ class PeopleController {
     await PeopleService.delete(id);
 
     return res.status(204).end();
+  }
+
+
+  async verifyPerson(req, res, next) {
+    try {
+      const { person_id } = req.params;
+      const person = await PeopleService.findByID(person_id);
+      req.person = person;
+      next();
+    } catch (error) {
+      next(error);
+    }
   }
 }
 
